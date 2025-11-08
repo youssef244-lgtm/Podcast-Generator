@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولّد البودكاست (v11.0 - نظام الوحدات)</title>
+    <title>مولّد البودكاست (v10.2 - نظام الصلاحيات)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -110,13 +110,14 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen p-4">
 
-    
-<header class="fixed top-0 left-0 right-0 bg-gray-800 shadow-md p-4 flex justify-between items-center z-10">
+    <!-- (Header) -->
+    <header class="fixed top-0 left-0 right-0 bg-gray-800 shadow-md p-4 flex justify-between items-center z-10">
         <h1 class="text-xl font-bold text-cyan-400">مولّد البودكاست</h1>
         
         <button id="admin-panel-btn" style="display: none;" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 text-sm font-bold py-2 px-3 rounded-lg transition duration-200">
             لوحة التحكم
         </button>
+        <!-- (خطأ إملائي تم إصلاحه) -->
         <button id="return-to-user-view-btn" style="display: none;" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold py-2 px-3 rounded-lg transition duration-200">
             الرجوع لوضع المستخدم
         </button>
@@ -134,8 +135,8 @@
         </div>
     </header>
 
-    
-<div id="auth-container" class="flex items-center justify-center min-h-screen pt-20" style="display: none;">
+    <!-- (Auth Container) -->
+    <div id="auth-container" class="flex items-center justify-center min-h-screen pt-20" style="display: none;">
         <div class="w-full max-w-md bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl">
             <div class="border-b border-gray-700 mb-6">
                 <nav class="flex space-x-4" aria-label="Tabs">
@@ -144,8 +145,8 @@
                 </nav>
             </div>
 
-            
-<form id="login-form" class="space-y-6">
+            <!-- (Login Form) -->
+            <form id="login-form" class="space-y-6">
                 <div>
                     <label for="login-email" class="block text-sm font-medium text-gray-300 mb-2">البريد الإلكتروني:</label>
                     <input type="email" id="login-email" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="user@example.com" required>
@@ -159,8 +160,8 @@
                 </button>
             </form>
 
-            
-<form id="register-form" class="space-y-6" style="display: none;">
+            <!-- (Register Form) -->
+            <form id="register-form" class="space-y-6" style="display: none;">
                 <div>
                     <label for="register-username" class="block text-sm font-medium text-gray-300 mb-2">اسمك (عربي أو انجليزي):</label>
                     <input type="text" id="register-username" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="خالد أشرف" required>
@@ -180,8 +181,8 @@
         </div>
     </div>
 
-    
-<div id="app-container" class="w-full max-w-2xl mx-auto pt-20" style="display: none;">
+    <!-- (App Container) -->
+    <div id="app-container" class="w-full max-w-2xl mx-auto pt-20" style="display: none;">
         <div class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl space-y-6">
             <p class="text-center text-gray-400">اكتب النص، الفكرة، أو السؤال.</p>
 
@@ -190,8 +191,8 @@
                 <textarea id="text-input" rows="6" class="w-full p-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 outline-none transition duration-200" placeholder="اكتب هنا الفكرة أو النص أو السؤال..."></textarea>
             </div>
 
-            
-<div class="flex flex-wrap gap-4 justify-center">
+            <!-- (Options) -->
+            <div class="flex flex-wrap gap-4 justify-center">
                 <div class="flex items-center">
                     <input type="radio" id="option-podcast" name="processing-option" value="podcast" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-600" checked>
                     <label for="option-podcast" class="ml-2 text-gray-300">بودكاست صوتي (حواري)</label>
@@ -210,8 +211,8 @@
                 </div>
             </div>
             
-            
-<div id="voice-options-container" class="flex-wrap gap-4 justify-center p-3 bg-gray-700 rounded-lg" style="display: none;">
+            <!-- (Voice Options) -->
+            <div id="voice-options-container" class="flex-wrap gap-4 justify-center p-3 bg-gray-700 rounded-lg" style="display: none;">
                 <span class="text-sm text-gray-300 w-full text-center mb-2">اختر الصوت:</span>
                 <div class="flex items-center">
                     <input type="radio" id="option-voice-male" name="voice-option" value="male" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-600" checked>
@@ -223,23 +224,25 @@
                 </div>
             </div>
             
-            
-<button id="generate-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg flex items-center justify-center">
+            <!-- (Generate Button) -->
+            <button id="generate-btn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-lg flex items-center justify-center">
                 <svg id="podcast-icon" class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4a3 0 016 0v6a3 3 0 11-6 0V4z" /><path d="M5.5 13a.5.5 0 01.5.5v1.5a4 4 0 008 0v-1.5a.5.5 0 011 0v1.5a5 5 0 01-4.472 4.975L10 20.5v-1.55a.5.5 0 011 0v1.55l.528.026a5 5 0 01-10.053 0L2 19.5v-1.5a.5.5 0 011 0v1.5a4 4 0 008 0v-1.5a.5.5 0 01.5-.5z" /></svg>
                 <span id="generate-btn-text">إنشاء بودكاست</span>
             </button>
             
-            
-<div id="status-container" class="text-center p-4 bg-gray-700 rounded-lg" style="display: none;"></div>
+            <!-- (Status/Error/Result) -->
+            <div id="status-container" class="text-center p-4 bg-gray-700 rounded-lg" style="display: none;"></div>
             <div id="error-container" class="text-center p-4 bg-red-800 text-red-100 rounded-lg" style="display: none;"></div>
             
-            
-<div id="script-container" class="bg-gray-700 p-4 rounded-lg" style="display: none;">
+            <!-- (Script Output) -->
+            <div id="script-container" class="bg-gray-700 p-4 rounded-lg" style="display: none;">
                 <h3 id="script-title" class="text-lg font-semibold text-cyan-400 mb-3">السكريبت:</h3>
                 <pre id="script-output" class="whitespace-pre-wrap text-sm text-gray-200 overflow-auto max-h-96"></pre>
             </div>
+            <!-- (Audio Output) -->
             <div id="audio-container" class="text-center" style="display: none;"><h3 class="text-lg font-semibold text-cyan-400 mb-3">النتيجة جاهزة:</h3><audio id="audio-player" controls class="w-full rounded-lg"></audio></div>
         
+            <!-- (Feedback Box) -->
             <div class="border-t border-gray-700 pt-6">
                 <h3 class="text-lg font-semibold text-white mb-3 text-center">صندوق الاقتراحات والملاحظات</h3>
                 <label for="feedback-textarea" class="block text-sm font-medium text-gray-300 mb-2">هل لديك اقتراح لتطوير التطبيق أو ملاحظة؟</label>
@@ -252,7 +255,7 @@
         </div>
     </div>
 
-
+    <!-- (Admin Panel Container) -->
     <div id="admin-panel-container" class="bg-gray-800 p-6 md:p-8 rounded-2xl shadow-2xl space-y-6">
         <div class="flex justify-between items-center">
             <h2 class="text-3xl font-bold text-cyan-400">لوحة تحكم الأدمن</h2>
@@ -309,7 +312,7 @@
         </button>
     </div>
 
-
+    <!-- (VIP Welcome Modal) -->
     <div id="vip-welcome-modal" style="display: none;" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
         <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center border-2 border-purple-500">
             <div class="text-6xl mb-4">🌟</div>
@@ -329,13 +332,13 @@
     </div>
 
 
-    
-<div id="global-loader" style="display: none;" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- (Global Loader) -->
+    <div id="global-loader" style="display: none;" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
         <svg class="animate-spin h-10 w-10 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
     </div>
 
-    
-<div id="global-error" style="display: none;" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
+    <!-- (Global Error) -->
+    <div id="global-error" style="display: none;" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
         <div class="bg-red-800 p-6 rounded-lg shadow-2xl max-w-sm w-full">
             <h3 class="text-lg font-bold text-white mb-4">حدث خطأ</h3>
             <p id="global-error-message" class="text-red-100 mb-6">رسالة خطأ هنا.</p>
@@ -345,10 +348,10 @@
         </div>
     </div>
 
-    
-    <!--
-        (تم نقل كل كود الجافاسكريبت من هنا)
-        (الكود ده بقى موجود في ملفات منفصلة زي 'main.js', 'api.js', 'auth.js')
+    <!-- 
+    ============================================================
+    (!!!) "العقل" (The Brain) تم نقله إلى `main.js` (!!!)
+    ============================================================
     -->
     <script type="module" src="./main.js"></script>
 
