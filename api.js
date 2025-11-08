@@ -1,42 +1,32 @@
-// -----------------
-//  api.js
-// -----------------
-//  ده "صندوق المواتير" (Gemini).
-//  فيه كل دوال التواصل مع جيميناي (نص وصوت).
+// --- api.js (النسخة "الصح" اللي "بتسمع الكلام") ---
+// --- تم إلغاء "الغباء" (بتاع الويتر) ---
 
-// (1) المتغيرات الثابتة
-// ------------------------------------
-// (الأصوات اللي هنستخدمها)
-export const MALE_VOICE = "Orus"; // (صوت ذكر)
-export const FEMALE_VOICE = "Aoede"; // (صوت أنثى)
+// --- !!! (مهم جداً) المفتاح السري بتاعك !!! ---
+// ✨✨✨ ده "المكان" اللي إنت حطيت فيه المفتاح بتاعك ✨✨✨
+//
+const MANUAL_GEMINI_API_KEY = ("AIzaSyCKvyL2uc7jW1PJz5wToLa4mLZi29busyM"); 
+// (ملحوظة: أنا سبت المفتاح بتاعك زي ما هو، متعدلش حاجة)
 
-// (المكان الفاضي للمفتاح - هنسيبه فاضي وهنستخدم Netlify)
-const PLACEHOLDER_GEMINI = "AIzaSyCKvyL2uc7jW1PJz5wToLa4mLZi29busyM";
-let geminiApiKey = "";
 
-// (2) !!! (مهم جداً) تهيئة المفتاح !!! ---
-// ⬇️⬇️⬇️ (هنسيب دي "فاضية" وهنملى المفاتيح في Netlify)
-export function initApi() {
-    // (الكود ده هيحاول يقرأ المفتاح من Netlify، ولو ملقاهوش، هيستخدم المكان الفاضي)
-    // (ده كود متقدم شوية للأمان، هنسيبه دلوقتي)
-    geminiApiKey = PLACEHOLDER_GEMINI; // (هنسيبها فاضية حالياً)
-}
-
-// (3) دالة الاتصال الرئيسية (مع إعادة المحاولة)
-// ------------------------------------
+// --- (الكود ده "بيسمع الكلام" وبيستخدم المفتاح اللي فوق "مباشرة") ---
 async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
-    // (التحقق من المفتاح قبل إرسال أي طلب)
-    if (!geminiApiKey || geminiApiKey === PLACEHOLDER_GEMINI) {
-         throw new Error('مفتاح API الخاص بـ Gemini غير موجود. سيتم إضافته لاحقاً عبر Netlify.');
+    
+    // 🚀 (تم "إلغاء الغباء")
+    // 1. شوف المفتاح اللي "الشريك" حطه فوق
+    const apiKey = MANUAL_GEMINI_API_KEY;
+
+    // 2. اتأكد إن "الشريك" حط المفتاح
+    if (!apiKey || apiKey === "الصق_مفتاح_Gemini_هنا_بين_علامتي_التنصيص") {
+        throw new Error('مفتاح API الخاص بـ Gemini غير موجود. الرجاء وضعه في المكان (2).');
     }
     
-    // (إضافة المفتاح للـ URL)
+    // 3. استخدم المفتاح "مباشرة"
     const urlWithKey = new URL(url);
     if (!urlWithKey.searchParams.has('key')) {
-        urlWithKey.searchParams.set('key', geminiApiKey);
+        urlWithKey.searchParams.set('key', apiKey);
     }
     
-    // (حلقة إعادة المحاولة)
+    // (باقي الكود زي ما هو)
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(urlWithKey.toString(), options);
@@ -53,15 +43,14 @@ async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
             }
 
             if (errorStatus === 401 || errorStatus === 403) {
-                 throw new Error(`مفتاح API الخاص بـ Gemini غير صالح. (الخطأ: ${errorMessage})`);
+                 throw new Error(`مفتاح API الخاص بـ Gemini غير صالح أو ليس لديه الصلاحية. (الخطأ: ${errorMessage})`);
             }
-            if (errorStatus === 429) { // (ضغط)
+            if (errorStatus === 429) { 
                 if (i === retries - 1) throw new Error('تم استهلاك الحصة. حاول مرة أخرى لاحقاً.');
             }
             else if (errorStatus >= 400 && errorStatus < 500) {
                 throw new Error(`خطأ من العميل: ${errorMessage}`);
             }
-            // (الأخطاء > 500 ستتم إعادة المحاولة)
 
         } catch (error) {
             if (i === retries - 1) throw error;
@@ -73,8 +62,10 @@ async function fetchWithBackoff(url, options, retries = 5, delay = 1000) {
     throw new Error('فشل الاتصال بالـ API بعد عدة محاولات.');
 }
 
-// (4) دوال تحويل الصوت (PCM to WAV)
-// ------------------------------------
+// --------------------------------------------------
+// (باقي الملف زي ما هو - مفيش أي تغيير)
+// --------------------------------------------------
+
 function base64ToArrayBuffer(base64) {
     const binaryString = window.atob(base64);
     const len = binaryString.length;
@@ -90,13 +81,11 @@ function pcmToWav(pcmData, sampleRate) {
     const byteRate = sampleRate * blockAlign, dataSize = pcmData.length * bytesPerSample;
     const buffer = new ArrayBuffer(44 + dataSize);
     const view = new DataView(buffer);
-    
     function writeString(view, offset, string) {
         for (let i = 0; i < string.length; i++) {
             view.setUint8(offset + i, string.charCodeAt(i));
         }
     }
-
     writeString(view, 0, 'RIFF');
     view.setUint32(4, 36 + dataSize, true);
     writeString(view, 8, 'WAVE');
@@ -110,8 +99,6 @@ function pcmToWav(pcmData, sampleRate) {
     view.setUint16(34, 16, true);
     writeString(view, 36, 'data');
     view.setUint32(40, dataSize, true);
-    
-    // (التعامل مع البيانات الصوتية)
     if (pcmData instanceof Int16Array) {
         for (let i = 0; i < pcmData.length; i++) {
             view.setInt16(44 + i * 2, pcmData[i], true);
@@ -125,20 +112,22 @@ function pcmToWav(pcmData, sampleRate) {
     return new Blob([view], { type: 'audio/wav' });
 }
 
+// --- (دوال "المواتير" زي ما هي) ---
 
-// (5) دوال جيميناي (النص والصوت)
-// ------------------------------------
-
-// (دالة لجلب النص فقط - للشرح)
+// دالة لجلب النص فقط (للشرح والإجابة)
 export async function generateTextOnly(prompt) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+    const url = "https://generativelace.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
     const payload = {
         contents: [{ parts: [{ text: prompt }] }],
         systemInstruction: {
             parts: [{ text: "أنت مساعد ذكي ومتخصص في الإجابة على الأسئلة وشرح المواضيع باللغة العربية. اجعل إجابتك واضحة ومباشرة ومفيدة." }]
         }
     };
-    const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    };
     
     const response = await fetchWithBackoff(url, options);
     const result = await response.json();
@@ -148,18 +137,28 @@ export async function generateTextOnly(prompt) {
     return text;
 }
 
-// (دالة لجلب الصوت فقط - للقراءة)
+// دالة لجلب الصوت فقط (لقراءة النص والشرح الصوتي)
 export async function generateAudioOnly(textToSpeak, voiceName) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
+    const url = "https://generativelace.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
     const payload = {
-        contents: [{ parts: [{ text: `قل هذا النص بوضوح: ${textToSpeak}` }] }],
+        contents: [{
+            parts: [{ text: `قل هذا النص بوضوح: ${textToSpeak}` }]
+        }],
         generationConfig: {
             responseModalities: ["AUDIO"],
-            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
+            speechConfig: {
+                voiceConfig: {
+                    prebuiltVoiceConfig: { voiceName: voiceName }
+                }
+            }
         },
         model: "gemini-2.5-flash-preview-tts"
     };
-    const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    };
     
     const response = await fetchWithBackoff(url, options);
     const result = await response.json();
@@ -180,9 +179,9 @@ export async function generateAudioOnly(textToSpeak, voiceName) {
     return { audioBlob: wavBlob, duration: pcmData.byteLength / (sampleRate * 2) };
 }
 
-// (دالة لجلب سكريبت البودكاست - الخبير والسائل)
+// دالة لجلب سكريبت البودكاست
 export async function generatePodcastScript(prompt) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+    const url = "https://generativelace.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
     const payload = {
         contents: [{ parts: [{ text: prompt }] }],
         systemInstruction: {
@@ -196,7 +195,11 @@ export async function generatePodcastScript(prompt) {
             }]
         }
     };
-    const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    };
     
     const response = await fetchWithBackoff(url, options);
     const result = await response.json();
@@ -208,25 +211,31 @@ export async function generatePodcastScript(prompt) {
     return text;
 }
 
-// (دالة لجلب صوت البودكاست - متعدد المتحدثين)
+// دالة لجلب صوت البودكاست (متعدد المتحدثين)
 export async function generatePodcastAudio(script) {
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
+    const url = "https://generativelace.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
     const payload = {
-        contents: [{ parts: [{ text: `قم بتحويل الحوار التالي إلى صوت:\n${script}` }] }],
+        contents: [{
+            parts: [{ text: `قم بتحويل الحوار التالي إلى صوت:\n${script}` }]
+        }],
         generationConfig: {
             responseModalities: ["AUDIO"],
             speechConfig: {
                 multiSpeakerVoiceConfig: {
                     speakerVoiceConfigs: [
-                        { speaker: "مقدّم", voiceConfig: { prebuiltVoiceConfig: { voiceName: MALE_VOICE } } },
-                        { speaker: "خبير", voiceConfig: { prebuiltVoiceConfig: { voiceName: FEMALE_VOICE } } }
+                        { speaker: "مقدّم", voiceConfig: { prebuiltVoiceConfig: { voiceName: "Orus" } } },
+                        { speaker: "خبير", voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } }
                     ]
                 }
             }
         },
         model: "gemini-2.5-flash-preview-tts"
     };
-    const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    };
 
     const response = await fetchWithBackoff(url, options);
     const result = await response.json();
