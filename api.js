@@ -11,7 +11,7 @@ export const MALE_VOICE = "Orus"; // (صوت ذكر)
 export const FEMALE_VOICE = "Aoede"; // (صوت أنثى)
 
 // (المكان الفاضي للمفتاح - هنسيبه فاضي وهنستخدم Netlify)
-const PLACEHOLDER_GEMINI = "الصق_مفتاح_Gemini_هنا_بين_علامتي_التنصيص";
+const PLACEHOLDER_GEMINI = "AIzaSyCKvyL2uc7jW1PJz5wToLa4mLZi29busyM";
 let geminiApiKey = "";
 
 // (2) !!! (مهم جداً) تهيئة المفتاح !!! ---
